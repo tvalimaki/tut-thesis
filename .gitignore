@@ -1,0 +1,35 @@
+# LaTeX files
+*.aux
+*.glo
+*.idx
+*.log
+*.toc
+*.ist
+*.acn
+*.acr
+*.alg
+*.bbl
+*.blg
+*.bcf
+*.nlg
+*.not
+*.ntn
+*.run.xml
+*.xdy
+*.dvi
+*.glg
+*.gls
+*.ilg
+*.ind
+*.lof
+*.lot
+*.maf
+*.mtc
+*.mtc1
+*.out
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+
+# Mac files
+.DS_Store

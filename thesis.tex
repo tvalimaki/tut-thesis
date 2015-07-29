@@ -1,0 +1,98 @@
+\documentclass[12pt,a4paper,oneside]{tut-thesis}
+% package definitions
+	\usepackage[finnish,main=english]{babel} % define document language
+	\usepackage[backend=biber,bibstyle=authoryear,citestyle=authoryear-comp,date=year,isbn=false,doi=false,url=false,eprint=false]{biblatex} % bibliographies
+	\usepackage[nodayofweek]{datetime} % date handling	
+	\usepackage{hyperref} 		% handles cross-referencing and produces hyperlinks
+	\usepackage{placeins} 		% defines \FloatBarrier to keep floats in proper sections
+	\usepackage{paralist} 		% defines in-line environments for lists
+	\usepackage{graphicx} 		% enhanced support for graphics
+	\usepackage{microtype} 		% avoid badboxes with typewriter font
+	\usepackage{csquotes} 		% handles quotations
+	\usepackage{ctable} 		% advanced tabular environment
+	\usepackage{amsmath} 		% math typesetting
+	\usepackage{amsfonts} 		% fonts needed in mathmode
+	\usepackage{todo} 			% insert todo notes
+% preparatory content
+	\newcommand{\pages}{%
+		\pageref*{endcontent}~\iflanguage{english}{pages}{sivua}%
+		\ifnum\pagedifference{endcontent}{endappendices}>0%
+			\ifnum\pagedifference{endcontent}{endappendices}>1%
+			, \pagedifference{endcontent}{endappendices}~\iflanguage{english}{Appendix pages}{liitesivua}%
+			\else
+			, 1~\iflanguage{english}{Appendix page}{liitesivu}%
+			\fi
+		\fi}
+	\makeglossaries
+	\loadglsentries{glossary}
+	\addbibresource{bibliography.bib}
+	\AtEveryBibitem{%
+		\clearlist{location}}
+	\newdateformat{omitday}{\iflanguage{english}%
+		{\monthname[\THEMONTH]}%
+		{\Monthnamefinnish{\THEMONTH}}%
+		~\THEYEAR}
+	\DeclareMathOperator*{\argmin}{arg\,min}
+	\DeclareMathOperator*{\argmax}{arg\,max}
+
+\author 	{Author Name}
+\title 		{Suomenkielinen otsikko}%
+			{English Title}
+\subtitle   {Master's Thesis}
+\thesistype {Diplomityö}%
+			{Master of Science Thesis}
+\programme  {Koulutusohjelma}%
+			{Degree Programme}
+\major		{Pääaine}%
+			{Major}
+\examiner 	{professori}{Professor}{Examiner Name}
+\approved 	{The examiner and topic of the thesis were approved
+			 by the Council of the Faculty of XXX on d~Month~Year}
+\keywords	{avainsanat}%
+			{keywords}
+\date 		{\omitday\today}
+
+\begin{document}
+\maketitle
+
+\frontmatter
+\abstract{Abstract goes here.}
+
+\begin{otherlanguage}{finnish}
+	\abstract{Suomalainen tiivistelmä jos sellanen tarvitaan.}
+\end{otherlanguage}
+
+\chapter*{Preface}
+Preface goes here.
+\vfill
+Tampere, \today
+\vskip\bigskipamount
+Tuomas Välimäki
+\vskip\bigskipamount
+
+\tableofcontents
+\listoffigures
+\listoftables
+\setlength{\glsdescwidth}{.8\linewidth}
+\printglossary[title={List of symbols and abbreviations}]
+\setglossarysection{section}
+\printglossary[type=notation]
+
+\mainmatter
+\chapter{Introduction}\label{ch:intro}
+Content goes here.
+\section{Section}\label{sec:section}
+This is a reference~\autocite[pp.~12--15]{Doe2015}.
+\subsection{Subsection}\label{sec:subsection}
+This is a subsection.
+
+\printbibliography[heading=bibintoc,title=References]
+\label{endcontent}
+
+\begin{appendices}
+\chapter{Appendix}
+Appendix stuff goes here.
+\end{appendices}
+\label{endappendices}
+
+\end{document}
