@@ -33,6 +33,7 @@
 \RequirePackage{glossary-super}	% used glossary style
 \RequirePackage{ifthen}			% conditionals
 \RequirePackage[hidelinks]{hyperref} % handles cross-referencing and produces hyperlinks
+\RequirePackage{setspace} % allows to change linespacing inside the document
 
 %-----------------------------------------------------------------
 % Define macros
@@ -124,6 +125,8 @@
 	pdfsubject    = {\@subtitle},
 	pdfkeywords   = {\@keywords}}
 }
+% Linespacing 1.2
+\renewcommand{\baselinestretch}{1.2}
 % Titlepage
 \renewcommand\maketitle{%
 	\pagenumbering{gobble}%
@@ -166,8 +169,11 @@
 	\end{spacing}
 	\normalfont
 	\bigskip
+	\begingroup
+	\setstretch{1}
 
 	#1
+	\endgroup
 }
 % Header and footer formatting
 \pagestyle{fancy}
@@ -219,7 +225,7 @@
 		\titlespacing{\chapter}{0pt}{-1.8ex plus -1ex minus -.2ex}{1ex plus .2ex}%
 		\begingroup%
 		\singlespacing%
-		\setlength{\bibitemsep}{1ex}%
+		\setlength{\bibitemsep}{1.2ex}%
 		\oldprintbibliography[#1]%
 		\endgroup%
 	}
