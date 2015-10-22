@@ -32,6 +32,7 @@
 \RequirePackage[nostyles,nopostdot,nonumberlist,nogroupskip,xindy]{glossaries} % handles glossaries
 \RequirePackage{glossary-super}	% used glossary style
 \RequirePackage{ifthen}			% conditionals
+\RequirePackage[hidelinks]{hyperref} % handles cross-referencing and produces hyperlinks
 
 %-----------------------------------------------------------------
 % Define macros
@@ -72,8 +73,12 @@
 		\oldcontentsline{#1}{#2}%
 	}%
 }%
-\setlength{\cftbeforechapskip}{0pt}%
-\renewcommand{\cftchapfont}{\normalfont}%
+\setlength{\cftbeforechapskip}{0pt} % remove space before chapters
+\renewcommand{\cftchapfont}{\normalfont} % typeset entries with normalfont
+\renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}} % use dots as leaders even for chapters
+\renewcommand{\cftchappagefont}{\normalfont} % typeset pagenumber with normalfont
+\setlength{\cftfigindent}{0pt} % don't indent figure list
+\setlength{\cfttabindent}{0pt} % don't indent table list
 }
 
 %-----------------------------------------------------------------
@@ -107,6 +112,18 @@
 %-----------------------------------------------------------------
 % Document formatting
 %-----------------------------------------------------------------
+% PDF settings
+\AtBeginDocument{%
+\hypersetup{%
+	pdfcreator    = {\LaTeX{} with 'tut-thesis' package},
+	% pdfproducer   = {\LaTeX{}},% will/should be set automatically to the correct TeX engine used
+	bookmarksopen = true,
+	bookmarksdepth= 2,% to show sections and subsections
+	pdfauthor     = {\@author},
+	pdftitle      = {\@title},
+	pdfsubject    = {\@subtitle},
+	pdfkeywords   = {\@keywords}}
+}
 % Titlepage
 \renewcommand\maketitle{%
 	\pagenumbering{gobble}%
@@ -187,6 +204,9 @@
 	\titleformat{\section}[hang]%
 		{\normalfont\sffamily\large\bfseries}%
 		{\thesection}{1em}{}%
+	\titleformat{\subsection}[hang]%
+		{\normalfont\sffamily\large\bfseries}%
+		{\thesubsection}{1em}{}%
 	\titlespacing{\chapter}{0pt}{5.03ex plus 1ex minus .2ex}{8.13ex plus .2ex}%
 }
 % Title for bibliography
@@ -197,7 +217,11 @@
 			{\normalfont\sffamily\large\bfseries}%
 			{\thechapter}{1em}{\MakeUppercase}%
 		\titlespacing{\chapter}{0pt}{-1.8ex plus -1ex minus -.2ex}{1ex plus .2ex}%
+		\begingroup%
+		\singlespacing%
+		\setlength{\bibitemsep}{1ex}%
 		\oldprintbibliography[#1]%
+		\endgroup%
 	}
 }
 % Title and formatting for appendices
@@ -208,9 +232,7 @@
 	\titlespacing{\chapter}{0pt}{-1.8ex plus -1ex minus -.2ex}{1ex plus .2ex}%
 	\addtocontents{toc}{\bigskip\cftpagenumbersoff{chapter}}%
 	\let\oldchapter\chapter%
-	\def\chapter#1{\oldchapter{#1}\thispagestyle{empty}}%
-	\clearpage%
-	\pagestyle{empty}
+	\def\chapter#1{\oldchapter{#1}\thispagestyle{empty}\pagestyle{empty}}%
 }
 % Date formatting
 \newcommand*{\Monthnamefinnish}[1]{%

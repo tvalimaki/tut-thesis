@@ -1,7 +1,7 @@
 \documentclass[12pt,a4paper,oneside]{tut-thesis}
 % package definitions
 	\usepackage[finnish,main=english]{babel} % define document language
-	\usepackage[backend=biber,bibstyle=authoryear,citestyle=authoryear-comp,date=year,isbn=false,doi=false,url=false,eprint=false]{biblatex} % bibliographies
+	\usepackage[backend=biber,bibstyle=authoryear,citestyle=authoryear-comp]{biblatex} % bibliographies
 	\usepackage[nodayofweek]{datetime} % date handling	
 	\usepackage{hyperref} 		% handles cross-referencing and produces hyperlinks
 	\usepackage{placeins} 		% defines \FloatBarrier to keep floats in proper sections
@@ -9,12 +9,13 @@
 	\usepackage{graphicx} 		% enhanced support for graphics
 	\usepackage{microtype} 		% avoid badboxes with typewriter font
 	\usepackage{csquotes} 		% handles quotations
+	\usepackage{tikz} 			% 'draw' good looking graphics from within latex
 	\usepackage{ctable} 		% advanced tabular environment
 	\usepackage{amsmath} 		% math typesetting
 	\usepackage{amsfonts} 		% fonts needed in mathmode
-	\usepackage{todo} 			% insert todo notes
+	\usepackage[math]{blindtext} 		% generates pointles text for testing purposes
 % preparatory content
-	\newcommand{\pages}{%
+	\newcommand{\pages}{% a macro to calculate the number of pages in the document
 		\pageref*{endcontent}~\iflanguage{english}{pages}{sivua}%
 		\ifnum\pagedifference{endcontent}{endappendices}>0%
 			\ifnum\pagedifference{endcontent}{endappendices}>1%
@@ -24,14 +25,15 @@
 			\fi
 		\fi}
 	\makeglossaries
-	\loadglsentries{glossary}
-	\addbibresource{bibliography.bib}
-	\AtEveryBibitem{%
+	\loadglsentries{glossary}% load glossary entries from the file glossary.tex
+	\addbibresource{bibliography.bib}% add bibliography resource
+	\AtEveryBibitem{% we might not want the location printed in the bibliography
 		\clearlist{location}}
-	\newdateformat{omitday}{\iflanguage{english}%
+	\newdateformat{omitday}{\iflanguage{english}% a new dateformat to use in the abstract
 		{\monthname[\THEMONTH]}%
 		{\Monthnamefinnish{\THEMONTH}}%
 		~\THEYEAR}
+	% some mathoperators
 	\DeclareMathOperator*{\argmin}{arg\,min}
 	\DeclareMathOperator*{\argmax}{arg\,max}
 
@@ -46,8 +48,9 @@
 \major		{Pääaine}%
 			{Major}
 \examiner 	{professori}{Professor}{Examiner Name}
-\approved 	{The examiner and topic of the thesis were approved
-			 by the Council of the Faculty of XXX on d~Month~Year}
+\approved 	{Examiner and topic approved by the
+			 Faculty Council of the Faculty of
+			 XXX on d~Month~Year}
 \keywords	{avainsanat}%
 			{keywords}
 \date 		{\omitday\today}
@@ -64,34 +67,69 @@
 
 \chapter*{Preface}
 Preface goes here.
-\vfill
+\vskip\bigskipamount
 Tampere, \today
-\vskip\bigskipamount
-Tuomas Välimäki
-\vskip\bigskipamount
+\vskip 2\bigskipamount
+\makeatletter
+\emph{\@author}
+\makeatother
 
 \tableofcontents
-\listoffigures
-\listoftables
+\begingroup
+	\renewcommand*{\addvspace}[1]{} % remove space between table and figure caption entries between chapters
+	\listoftables
+	\listoffigures
+\endgroup
 \setlength{\glsdescwidth}{.8\linewidth}
 \printglossary[title={List of symbols and abbreviations}]
 \setglossarysection{section}
+\vspace*{-1.5cm} % bring glossaries closer together
 \printglossary[type=notation]
 
 \mainmatter
-\chapter{Introduction}\label{ch:intro}
-Content goes here.
-\section{Section}\label{sec:section}
-This is a reference~\autocite[pp.~12--15]{Doe2015}.
-\subsection{Subsection}\label{sec:subsection}
-This is a subsection.
+\blinddocument % generates a full document of non-sense
+\begin{table}
+	\centering
+	\begin{tabular}{llr}  
+	    \toprule
+	    \multicolumn{2}{c}{Item} \\
+	    \cmidrule(r){1-2}
+	    Animal    & Description & Price (\$) \\
+	    \midrule
+	    Gnat      & per gram    & 13.65      \\
+	          	  &    each     & 0.01       \\
+	    Gnu       & stuffed     & 92.50      \\
+	    Emu       & stuffed     & 33.33      \\
+	    Armadillo & frozen      & 8.99       \\
+	    \bottomrule
+  	\end{tabular}
+  	\caption{Comparison of exotic meet prices.}
+  	\label{tab:comparisontable}
+\end{table}
+\blindtext % more non-sense
 
+We can later reference the Table~\ref{tab:comparisontable} just so. \blindtext % more non-sense
+
+\begin{figure}
+	\centering
+	\begin{tikzpicture}
+		\node[draw,rectangle,minimum width=.7\textwidth,minimum height=.4\textwidth] {A dummy figure};
+	\end{tikzpicture}
+	\caption{A dummy figure made with TikZ.}
+	\label{fig:dummyfigure}
+\end{figure}
+\blindtext % more non-sense
+
+To reference the Figure~\ref{fig:dummyfigure} use \verb|Figure~\ref{fig:dummyfigure}|.
+\blindmathpaper % non-sense with math
+
+\nocite{*} % make all entries in bib appear in bibliography, again for only testing purposes
 \printbibliography[heading=bibintoc,title=References]
 \label{endcontent}
 
 \begin{appendices}
 \chapter{Appendix}
-Appendix stuff goes here.
+\blindtext % again some non-sense
 \end{appendices}
 \label{endappendices}
 
