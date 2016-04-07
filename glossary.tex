@@ -1,11 +1,124 @@
 % Add term explanations. As the package auto-arranges, order is irrelevant
 % ftp://ftp.funet.fi/pub/TeX/CTAN/macros/latex/contrib/glossaries/glossariesbegin.pdf
 
+% Define some convenience macros
+\newcommand{\glosentry}[3][]{ % name, description
+	\newglossaryentry{#2}{%
+		name={#2},
+		description={#3},
+		parent=glossary,
+		#1}
+	\glsadd{#2}
+}
+\newcommand{\acrentry}[4][]{ % short, long, description
+	\newacronym[description={#3\ifthenelse{\equal{#4}{}}{}{, {#4}}},parent=glossary,#1]{#2}{#2}{#3}
+	\glsadd{#2}
+}
+\newcommand{\notentry}[4][]{ % sort, name, description
+    \newglossaryentry{#2}{%
+        sort={#2},
+        name={#3},
+        description={#4},
+        parent=romanletter,
+        #1}
+    \glsadd{#2}
+}
+
+% Add notation categories
+\newglossaryentry{glossary}{sort=1,name={},description={}}
+\newglossaryentry{symbol}{sort=2,name={},description={}}
+\newglossaryentry{greekletter}{sort=3,name={},description={}}
+\newglossaryentry{romanletter}{sort=4,name={},description={}}
+
 % Add glossary entries (name, description)
-\glosentry{C++}{programming language}
+% \glosentry{C++}{Programming language}
 
 % Add acronyms (short, long, description)
+\acrentry{QR}{quick response}{(code), a two-dimensional bar-code}
+\acrentry[\glslongpluralkey={Markov decision processes}]{MDP}{Markov decision process}{}
 \acrentry[\glslongpluralkey={partially observable Markov decision processes}]{POMDP}{partially observable Markov decision process}{}
+\acrentry{GMM}{Gaussian mixture model}{}
+\acrentry{ROS}{Robot Operating System}{an open source framework for robotics software development}
+\acrentry{PBVI}{point-based value iteration}{}
+\acrentry{pdf}{probability density function}{}
+\acrentry{MI}{mutual information}{}
+\acrentry{EKF}{extended Kalman filter}{}
+\acrentry{KL}{Kullback-Leibler}{(divergence)}
+\acrentry{SLAM}{simultaneous localization and mapping}{}
+\acrentry{PID}{proportional-integral-derivative}{(controller)}
+\acrentry{PWLC}{piecewise linear and convex}{}
+\acrentry{IMU}{inertial measurement unit}{}
+
+% Special notations to appear on top
+\notentry[parent=symbol,sort=0]{emptyline}{}{}
+\notentry[parent=symbol]{oplus}{$\oplus$}{cross-sum between sets}
+\notentry[parent=symbol]{cup}{$\cup$}{union of arbitrary sets}
 
 % Add notations (name, notation, description)
+% Greek letters can be sorted according to english alphabets (which is wrong)
+% or by arranging by hand with the sort key
+\notentry[parent=greekletter,sort=01]{alpha}{$\alpha$}{vector containing the value of a policy tree for all states}
+\notentry[parent=greekletter,sort=02]{beta}{$\beta$}{camera angle of view}
+\notentry[parent=greekletter,sort=03]{Gamma}{$\Gamma(b,a,b')$}{belief transition function}
+\notentry[parent=greekletter,sort=04]{gamma}{$\gamma$}{discount factor}
+\notentry[parent=greekletter,sort=05]{delta}{$\delta$}{measured angle}
+\notentry[parent=greekletter,sort=06]{epsilon}{$\epsilon$}{magnitude of the Bellman error}
+\notentry[parent=greekletter,sort=07]{theta}{$\theta_t$}{robot's heading}
+\notentry[parent=greekletter,sort=08]{vartheta}{$\vartheta$}{weighing factor for information gain on current target}
+\notentry[parent=greekletter,sort=09]{kappa}{$\kappa$}{constant positive scalar penalty}
+\notentry[parent=greekletter,sort=10]{Lambda}{$\Lambda$}{set of all $\alpha$-vectors}
+\notentry[parent=greekletter,sort=11]{mu}{$\mu$}{mean of belief}
+\notentry[parent=greekletter,sort=12]{pi}{$\pi$}{policy}
+\notentry[parent=greekletter,sort=13]{rho}{$\rho(b,a)$}{reward for executing action $a$ in belief $b$}
+\notentry[parent=greekletter,sort=14]{Sigma}{$\Sigma$}{covariance of belief}
+\notentry[parent=greekletter,sort=15]{tau}{$\tau(b,a,z')$}{belief update function}
+\notentry[parent=greekletter,sort=16]{varphi}{$\varphi$}{weighing factor for information gain on next target}
+\notentry[parent=greekletter,sort=17]{chi}{$\chi_n$}{the best $n$-step $\alpha$-vector}
+\notentry[parent=greekletter,sort=18]{omega}{$\omega_t$}{rotational velocity}
+
+% Add notations (name, notation, description)
+\notentry{Dkl}{$D_{KL}(\cdot,\cdot)$}{Kullback-Leibler divergence}
+\notentry{tr}{$\text{tr}(\cdot)$}{trace}
+\notentry{ln}{$\text{ln}(\cdot)$}{natural logarithm}
 \notentry{N}{$\mathcal{N}(\mu,\Sigma)$}{multivariate normal distribution with mean $\mu$ and covariance $\Sigma$}
+\notentry{E}{$\mathbb{E}[\cdot]$}{expected value}
+\notentry{Re}{$\mathbb{R}$}{set of real numbers}
+\notentry{S}{$S$}{state space}
+\notentry{s}{$s$}{state}
+\notentry{A}{$A$}{action space}
+\notentry{a}{$a$}{action}
+\notentry{C}{$C(a_t,\beta,r_{max})$}{camera cone of observation}
+\notentry{T}{$T(s,a,s')$}{state transition model}
+\notentry{R}{$R(s,a)$}{reward for executing action $a$ in state $s$}
+\notentry{Z}{$Z$}{observation space}
+\notentry{z}{$z$}{observation}
+\notentry{O}{$O(s',a,z')$}{observation function}
+\notentry{B}{$B$}{belief space}
+\notentry{b}{$b(s)$}{belief}
+\notentry{t}{$t$}{time}
+\notentry{Vn}{$V^\pi_n$}{value of policy $\pi$ when there are $n$ steps remaining}
+\notentry{V}{$V^\pi$}{value of a stationary policy $\pi$}
+\notentry{d}{$d_n$}{decision rule when there are $n$ steps remaining}
+\notentry{p}{$p(X)$}{probability of $X$}
+\notentry{H}{$H$}{planning horizon}
+\notentry{h}{$h_t$}{history of actions and measurements up to time $t$}
+\notentry{vt}{$v_t$}{translational velocity}
+\notentry{x}{$x_t$}{robot's $x$-coordinate}
+\notentry{y}{$y_t$}{robot's $y$-coordinate}
+\notentry{u}{$u_t$}{robot control}
+\notentry{Q}{$Q$}{covariance of control noise}
+\notentry{q}{$q_t$}{control noise}
+\notentry{W}{$W$}{covariance of measurement noise}
+\notentry{w}{$w_t$}{measurement noise}
+\notentry{rmax}{$r_{max}$}{camera maximum range}
+\notentry{l}{$l^i$}{location of $i$\textsuperscript{th} landmark}
+\notentry{L}{$L^i$}{belief about location of $i$\textsuperscript{th} landmark}
+\notentry{f}{$f(\cdot)$}{transition function}
+\notentry{m}{$m(\cdot)$}{measurement function}
+\notentry{Kp}{$K_p$}{PID controller's proportional gain}
+\notentry{Ki}{$K_i$}{PID controller's integral gain}
+\notentry{Kd}{$K_d$}{PID controller's derivative gain}
+\notentry{I}{$\mathcal{I}(\cdot,\cdot)$}{mutual information}
+\notentry{g}{$g(a_t,a_{t-1})$}{cost for taking action $a_t$ when previous action was $a_{t-1}$}
+\notentry{VA}{$\mathit{VA}(C_{j=1:3})$}{area from which measurements are obtained}
+\notentry{sr}{$s^r_t$}{robot's state at time $t$}

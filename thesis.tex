@@ -1,113 +1,92 @@
-\documentclass[12pt,a4paper,oneside]{tut-thesis}
+\documentclass[12pt,a4paper,oneside,finnish,main=english]{tut-thesis}
 % package definitions
-	\usepackage[finnish,main=english]{babel} % define document language
-	\usepackage[backend=biber,bibstyle=authoryear,citestyle=authoryear-comp]{biblatex} % bibliographies
-	\usepackage[nodayofweek]{datetime} % date handling
-	\usepackage{placeins} 		% defines \FloatBarrier to keep floats in proper sections
-	\usepackage{paralist} 		% defines in-line environments for lists
-	\usepackage{graphicx} 		% enhanced support for graphics
-	\usepackage{microtype} 		% avoid badboxes with typewriter font
-	\usepackage{csquotes} 		% handles quotations
-	\usepackage{tikz} 			% 'draw' good looking graphics from within latex
-	\usepackage{ctable} 		% advanced tabular environment
-	\usepackage{amsmath} 		% math typesetting
-	\usepackage{amsfonts} 		% fonts needed in mathmode
-	\usepackage[math]{blindtext} 		% generates pointles text for testing purposes
-% preparatory content
-	\newcommand{\pages}{% a macro to calculate the number of pages in the document
-		\pageref*{endcontent}~\iflanguage{english}{pages}{sivua}%
-		\ifnum\pagedifference{endcontent}{endappendices}>0%
-			\ifnum\pagedifference{endcontent}{endappendices}>1%
-			, \pagedifference{endcontent}{endappendices}~\iflanguage{english}{Appendix pages}{liitesivua}%
-			\else
-			, 1~\iflanguage{english}{Appendix page}{liitesivu}%
-			\fi
-		\fi}
-	\makeglossaries
-	\loadglsentries{glossary}% load glossary entries from the file glossary.tex
-	\addbibresource{bibliography.bib}% add bibliography resource
-	\AtEveryBibitem{% we might not want the location printed in the bibliography
-		\clearlist{location}}
-	\newdateformat{omitday}{\iflanguage{english}% a new dateformat to use in the abstract
-		{\monthname[\THEMONTH]}%
-		{\Monthnamefinnish{\THEMONTH}}%
-		~\THEYEAR}
-	% some mathoperators
-	\DeclareMathOperator*{\argmin}{arg\,min}
-	\DeclareMathOperator*{\argmax}{arg\,max}
+\usepackage[backend=biber,bibstyle=authoryear,citestyle=authoryear-comp]{biblatex} % bibliographies
+\usepackage[useregional,british]{datetime2}[2016/01/22] % make sure you also have v1.1 or newer of the datetime2-finnish language module
+\usepackage{placeins} % defines \FloatBarrier to keep floats in proper sections
+\usepackage{paralist} % defines in-line environments for lists
+\usepackage{graphicx} % enhanced support for graphics
+\usepackage{microtype} % avoid badboxes with typewriter font
+\usepackage{csquotes} % handles quotations
+\usepackage{tikz} % 'draw' good looking graphics from within latex
+\usepackage{ctable} % advanced tabular environment
+\usepackage{amsmath} % math typesetting
+\usepackage{amsfonts} % fonts needed in mathmode
+\usepackage[math]{blindtext} % generates pointles text for testing purposes
 
+% preparatory content
+\makeglossaries
+\loadglsentries{glossary}% load glossary entries from the file glossary.tex
+\addbibresource{bibliography.bib}% add bibliography resource
+% some mathoperators
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+% macros with two arguments have the form
+% \macro[secondary language]{main language}
+% where the secondary language is optional
 \author 	{Author Name}
-\title 		{Suomenkielinen otsikko}%
-			{English Title}
-\subtitle   {Master's Thesis}
-\thesistype {Diplomityö}%
-			{Master of Science Thesis}
-\programme  {Koulutusohjelma}%
-			{Degree Programme}
-\major		{Pääaine}%
-			{Major}
-\examiner 	{professori}{Professor}{Examiner Name}
-\approved 	{Examiner and topic approved by the
+\title 		[Suomenkielinen otsikko]   {English Title}
+\thesistype [Diplomityö] 			   {Master of Science Thesis}
+\keywords	[avainsanat] 			   {keywords}
+\programme  [Koulutusohjelma] 		   {Degree Programme}
+\major		[Pääaine] 				   {Major}
+\examiner 	[professori Ensimmäinen Tarkastaja \and TkT Toinen Tarkastaja]
+			{Professor First Examiner \and PhD Another Examiner}
+\extrainfo 	{Examiner and topic approved by the
 			 Faculty Council of the Faculty of
 			 XXX on d~Month~Year}
-\keywords	{avainsanat}%
-			{keywords}
-\date 		{\omitday\today}
+\date 		{\Today} % in the final version this should be set to the date after which no changes were made e.g. \DTMDate{2016-04-07}
+\location 	{Tampere}
 
 \begin{document}
 \maketitle
 
 \frontmatter
-\abstract{Abstract goes here.}
+\begin{abstract}
+	Abstract goes here.
+\end{abstract}
 
 \begin{otherlanguage}{finnish}
-	\abstract{Suomalainen tiivistelmä jos sellanen tarvitaan.}
+	\begin{abstract}
+		Suomalainen tiivistelmä jos sellanen tarvitaan.
+	\end{abstract}
 \end{otherlanguage}
 
-\chapter*{Preface}
-Preface goes here.
-\vskip\bigskipamount
-Tampere, \today
-\vskip 2\bigskipamount
-\makeatletter
-\emph{\@author}
-\makeatother
+\begin{preface}
+	Preface goes here.
+\end{preface}
 
 \tableofcontents
-\begingroup
-	\renewcommand*{\addvspace}[1]{} % remove space between table and figure caption entries between chapters
-	\listoftables
-	\listoffigures
-\endgroup
-\setlength{\glsdescwidth}{.8\linewidth}
+\listoftables
+\listoffigures
+
+% if your glossary has long entries, you can adjust the entrywidth
+% using \setlength{\glsentrywidth}{<width>}, where <width> is e.g. 7em
 \printglossary[title={List of symbols and abbreviations}]
-\setglossarysection{section}
-\vspace*{-1.5cm} % bring glossaries closer together
-\printglossary[type=notation]
 
 \mainmatter
 \blinddocument % generates a full document of non-sense
-\begin{table}
-	\centering
-	\begin{tabular}{llr}  
-	    \toprule
-	    \multicolumn{2}{c}{Item} \\
-	    \cmidrule(r){1-2}
-	    Animal    & Description & Price (\$) \\
-	    \midrule
-	    Gnat      & per gram    & 13.65      \\
-	          	  &    each     & 0.01       \\
-	    Gnu       & stuffed     & 92.50      \\
-	    Emu       & stuffed     & 33.33      \\
-	    Armadillo & frozen      & 8.99       \\
-	    \bottomrule
-  	\end{tabular}
-  	\caption{Comparison of exotic meet prices.}
-  	\label{tab:comparisontable}
-\end{table}
+\ctable[%
+	caption=Comparison of exotic meet prices,
+	label=tab:comparisontable,
+	mincapwidth=\textwidth
+	]%
+	{llr}{}{%  
+	\toprule
+	\multicolumn{2}{c}{Item} \\
+	\cmidrule(r){1-2}
+	Animal    & Description & Price (\$) \\
+	\midrule
+	Gnat      & per gram    & 13.65      \\
+	      	  &    each     & 0.01       \\
+	Gnu       & stuffed     & 92.50      \\
+	Emu       & stuffed     & 33.33      \\
+	Armadillo & frozen      & 8.99       \\
+	\bottomrule
+	}
 \blindtext % more non-sense
 
-We can later reference the Table~\ref{tab:comparisontable} just so. \blindtext % more non-sense
+We can later reference the Table~\ref{tab:comparisontable} just so~\autocite{Doe2015}. \blindtext % more non-sense
 
 \begin{figure}
 	\centering
@@ -117,19 +96,20 @@ We can later reference the Table~\ref{tab:comparisontable} just so. \blindtext %
 	\caption{A dummy figure made with TikZ.}
 	\label{fig:dummyfigure}
 \end{figure}
+
 \blindtext % more non-sense
 
-To reference the Figure~\ref{fig:dummyfigure} use \verb|Figure~\ref{fig:dummyfigure}|.
+According to \textcite{Doe2015} the Figure~\ref{fig:dummyfigure} can be referenced using the \LaTeX{} command \verb|Figure~\ref{fig:dummyfigure}|.
 \blindmathpaper % non-sense with math
 
-\nocite{*} % make all entries in bib appear in bibliography, again for only testing purposes
+% all entries that are cited automatically appear in the bibliography
 \printbibliography[heading=bibintoc,title=References]
-\label{endcontent}
 
 \begin{appendices}
 \chapter{Appendix}
 \blindtext % again some non-sense
+\chapter{Another appendix}
+\blindtext
 \end{appendices}
-\label{endappendices}
 
 \end{document}
