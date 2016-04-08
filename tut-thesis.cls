@@ -11,23 +11,37 @@
 \NeedsTeXFormat{LaTeX2e}[1995/12/01]
 \ProvidesClass{tut-thesis}[2016/04/07 Extension to basic LaTeX document class 'book']
 
-\DeclareOption{main=english}{%
-    \PassOptionsToPackage{\CurrentOption}{babel}%
-    \def\main@langu@ge{english}}
-\DeclareOption{main=finnish}{%
-    \PassOptionsToPackage{\CurrentOption}{babel}%
-    \def\main@langu@ge{finnish}}
-\DeclareOption{english}{\PassOptionsToPackage{\CurrentOption}{babel}}
-\DeclareOption{finnish}{\PassOptionsToPackage{\CurrentOption}{babel}}
+% Declare class options
+\RequirePackage{kvoptions}
+
+\SetupKeyvalOptions{family=tl, prefix=tl@}
+\DeclareStringOption[english]{main}
+\ProcessKeyvalOptions*
+
+\def\main@langu@ge{\tl@main}
+\PassOptionsToPackage{main=\tl@main}{babel}
+
+\DeclareOption{12pt}{\PassOptionsToClass{\CurrentOption}{book}}
+\DeclareOption{a4paper}{\PassOptionsToClass{\CurrentOption}{book}}
+\DeclareOption{oneside}{\PassOptionsToClass{\CurrentOption}{book}}
+
+% Pass all unknown options to the base class
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{book}}
+
+% Set defaults
+\ExecuteOptions{12pt}
+\ExecuteOptions{a4paper}
+\ExecuteOptions{oneside}
 
 \ProcessOptions\relax
 % Load the basic template 'book.cls'. 
-\LoadClassWithOptions{book}
+\LoadClass{book}
 
 % Load required packages
 \RequirePackage[T1]{fontenc} 	% proper font encoding for accented characters
 \RequirePackage[utf8]{inputenc} % stop living in the medieval times and use utf8 input encoding
-\RequirePackage{babel}          % translations and correct hyphenation
+\RequirePackage[finnish,english]{babel} % translations and correct hyphenation
+\RequirePackage[useregional,british]{datetime2}[2016/01/22] % make sure you also have v1.1 or newer of the datetime2-finnish language module
 \RequirePackage[inner=4cm,outer=2cm,top=2.5cm,bottom=2.5cm]{geometry} % define page margins
 \RequirePackage[labelsep=space,labelfont=bf,it,textfont=it]{caption} % figure and table captions
 \RequirePackage[labelfont=up]{subcaption} % subfigure and subtable captions
@@ -124,7 +138,9 @@
 }
 \newcommand\printexaminer{\testexaminer: \prntexaminer}
 
-% translations
+%-----------------------------------------------------------------
+% Define translations
+%-----------------------------------------------------------------
 \newcommand{\examinername}{%
   \@ifundefined{examinername@\languagename}%
     {Examiner}%
@@ -140,9 +156,66 @@
     {and}%
     {\@nameuse{examinersep@\languagename}}%
 }
+\newcommand{\universityname}{%
+  \@ifundefined{universityname@\languagename}%
+    {Tampere University of Technology}%
+    {\@nameuse{universityname@\languagename}}%
+}
+\newcommand{\majorname}{%
+  \@ifundefined{majorname@\languagename}%
+    {Major}%
+    {\@nameuse{majorname@\languagename}}%
+}
+\newcommand{\keywordsname}{%
+  \@ifundefined{keywordsname@\languagename}%
+    {Keywords}%
+    {\@nameuse{keywordsname@\languagename}}%
+}
+\newcommand{\appendixp@gename}{%
+  \@ifundefined{appendixp@gename@\languagename}%
+    {Appendix page}%
+    {\@nameuse{appendixp@gename@\languagename}}%
+}
+\newcommand{\appendixp@genamepl}{%
+  \@ifundefined{appendixp@genamepl@\languagename}%
+    {Appendix pages}%
+    {\@nameuse{appendixp@genamepl@\languagename}}%
+}
+\newcommand{\pagesname}{%
+  \@ifundefined{pagesname@\languagename}%
+    {pages}%
+    {\@nameuse{pagesname@\languagename}}%
+}
 \newcommand{\examinername@finnish}{Tarkastaja}
 \newcommand{\examinernamepl@finnish}{Tarkastajat}
 \newcommand{\examinersep@finnish}{ja}
+\newcommand{\universityname@finnish}{Tampereen teknillinen yliopisto}
+\newcommand{\majorname@finnish}{Pääaine}
+\newcommand{\keywordsname@finnish}{Avainsanat}
+\newcommand{\appendixp@gename@finnish}{liitesivu}
+\newcommand{\appendixp@genamepl@finnish}{liitesivua}
+\newcommand{\pagesname@finnish}{sivua}
+
+\addto\captionsfinnish{%
+  \renewcommand{\prefacename}{Alkusanat}%
+  \renewcommand{\bibname}{Lähteet}%
+  \renewcommand{\glossaryname}{Lyhenteet ja merkinnät}%
+}
+\addto\captionsenglish{%
+  \renewcommand{\bibname}{References}%
+  \renewcommand{\glossaryname}{List of symbols and abbreviations}%
+}
+\AtEndPreamble{%
+\@ifpackageloaded{biblatex}{%
+    \DefineBibliographyStrings{finnish}{%
+      bibliography = {Lähteet},
+      references = {Lähteet},
+    }%
+    \DefineBibliographyStrings{english}{%
+      bibliography = {References},
+      references = {References},
+    }}{}
+}
 
 %-----------------------------------------------------------------
 % TOC formatting
@@ -225,7 +298,6 @@
     	\glstarget{##2}{##3} & ##4\glspostdescription\space ##6\\}
 }
 
-\newglossary[nlg]{notation}{not}{ntn}{}
 \setglossarystyle{tut-thesis}
 \renewcommand{\glsglossarymark}[1]{\markboth{\MakeUppercase{#1}}{\MakeUppercase{#1}}}
 \glsdisablehyper
@@ -303,11 +375,11 @@
 \setlength{\miniparskip}{\parskip}
 
 \newenvironment{abstract}{%
-	\chapter*{\iflanguage{english}{Abstract}{Tiivistelmä}}
+	\chapter*{\abstractname}
 	\sffamily
 	\begin{spacing}{1.0}
 		\raggedright
-		\iflanguage{english}{TAMPERE UNIVERSITY OF TECHNOLOGY}{TAMPEREEN TEKNILLINEN YLIOPISTO}\\
+		\MakeUppercase{\universityname}\\
 		\@programme\\
 		\textbf{\MakeUppercase{\@author}}: \@title\\
 		\@thesistype, \pages\\
@@ -315,9 +387,9 @@
           \DTMlangsetup*{showdayofmonth=false}
 		  \@date\\
         }%
-		\iflanguage{english}{Major}{Pääaine}: \@major\\
+		\majorname: \@major\\
 		\printexaminer\\
-		\iflanguage{english}{Keywords}{Avainsanat}: \@keywords
+		\keywordsname: \@keywords
 	\end{spacing}
 	\normalfont
 	\bigskip
@@ -329,7 +401,7 @@
 }
 % Preface
 \newenvironment{preface}{%
-    \chapter*{\iflanguage{english}{Preface}{Alkusanat}}
+    \chapter*{\prefacename}
 }{%
     \vskip\bigskipamount
     \@location, \@date
@@ -354,7 +426,7 @@
 	\lhead[\thepage]{}%
 }
 \renewcommand{\headrulewidth}{0pt}
-\setlength\headheight{2.9ex}
+\setlength\headheight{2.95ex}
 \setlength\parskip{1.5ex plus 1ex minus .2ex}
 % Titles for frontmatter
 \appto\frontmatter{%
@@ -387,7 +459,7 @@
 % Title for bibliography
 \AtBeginDocument{%
 	\let\oldprintbibliography\printbibliography
-	\def\printbibliography[#1]{%
+	\renewcommand\printbibliography[1][]{%
 		\titleformat{\chapter}[hang]%
 			{\normalfont\sffamily\large\bfseries}%
 			{\thechapter}{1em}{\MakeUppercase}%
@@ -395,18 +467,18 @@
 		\begingroup%
 		\singlespacing%
 		\setlength{\bibitemsep}{\parskip}%
-		\oldprintbibliography[#1]%
+		\oldprintbibliography[heading=bibintoc,#1]%
 		\endgroup%
         \label{endcontent}%
 	}%
     % a macro to calculate the number of pages in the document
     \newcommand{\pages}{% 
-        \pageref*{endcontent}~\iflanguage{english}{pages}{sivua}%
+        \pageref*{endcontent}~\pagesname%
         \ifnum\pagedifference{endcontent}{endappendices}>0%
             \ifnum\pagedifference{endcontent}{endappendices}>1%
-            , \pagedifference{endcontent}{endappendices}~\iflanguage{english}{Appendix pages}{liitesivua}%
+            , \pagedifference{endcontent}{endappendices}~\appendixp@genamepl%
             \else
-            , 1~\iflanguage{english}{Appendix page}{liitesivu}%
+            , 1~\appendixp@gename%
             \fi
         \fi}
 }
@@ -421,4 +493,5 @@
 	\let\oldchapter\chapter%
 	\def\chapter#1{\oldchapter{#1}\thispagestyle{empty}\pagestyle{empty}}%
 }
+\AtEndEnvironment{appendices}{\thispagestyle{empty}\pagestyle{empty}}
 \endinput

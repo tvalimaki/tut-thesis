@@ -1,7 +1,6 @@
-\documentclass[12pt,a4paper,oneside,finnish,main=english]{tut-thesis}
+\documentclass{tut-thesis}
 % package definitions
 \usepackage[backend=biber,bibstyle=authoryear,citestyle=authoryear-comp]{biblatex} % bibliographies
-\usepackage[useregional,british]{datetime2}[2016/01/22] % make sure you also have v1.1 or newer of the datetime2-finnish language module
 \usepackage{placeins} % defines \FloatBarrier to keep floats in proper sections
 \usepackage{paralist} % defines in-line environments for lists
 \usepackage{graphicx} % enhanced support for graphics
@@ -62,7 +61,7 @@
 
 % if your glossary has long entries, you can adjust the entrywidth
 % using \setlength{\glsentrywidth}{<width>}, where <width> is e.g. 7em
-\printglossary[title={List of symbols and abbreviations}]
+\printglossary
 
 \mainmatter
 \blinddocument % generates a full document of non-sense
@@ -103,7 +102,7 @@ According to \textcite{Doe2015} the Figure~\ref{fig:dummyfigure} can be referenc
 \blindmathpaper % non-sense with math
 
 % all entries that are cited automatically appear in the bibliography
-\printbibliography[heading=bibintoc,title=References]
+\printbibliography
 
 \begin{appendices}
 \chapter{Appendix}
