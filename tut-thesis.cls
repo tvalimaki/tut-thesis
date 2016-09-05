@@ -59,7 +59,6 @@
 \RequirePackage[hidelinks]{hyperref} % handles cross-referencing and produces hyperlinks
 \RequirePackage{longtable} 		% tables that span multiple pages
 \RequirePackage{tabu} 			% advanced tabular environment that provides e.g. automatic calculation of column widths
-\RequirePackage{algorithm} 		% algorithm environment
 \RequirePackage{tikz}           % used to draw the TUT logo
 
 %-----------------------------------------------------------------
@@ -236,6 +235,7 @@
 	}%
 }%
 \setlength{\cftbeforechapskip}{0pt} % remove space before chapters
+\renewcommand{\cftchapaftersnum}{.} % follow chapternumbers with a dot
 \renewcommand{\cftchapfont}{\normalfont} % typeset entries with normalfont
 \renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}} % use dots as leaders even for chapters
 \renewcommand{\cftchappagefont}{\normalfont} % typeset pagenumber with normalfont
@@ -258,18 +258,28 @@
 	\oldlistoffigures
 	\endgroup
 }
-\let\oldlistofalgorithms\listofalgorithms
-\def\listofalgorithms{%
-	\begingroup
-	\renewcommand*{\addvspace}[1]{}
-	\oldlistofalgorithms
-	\endgroup
-}
-% make every \listof behave like the \listoffigures
-\patchcmd{\listof}% <cmd>
-  {\float@listhead}% <search>
-  {\@namedef{l@#1}{\l@figure}\float@listhead}% <replace>
-  {}{}% <success><failure>
+\AtBeginDocument{%
+	\@ifundefined{listofalgorithms}{}{%
+		\begingroup
+			\let\newcounter\@gobble
+			\let\setcounter\@gobbletwo
+			\globaldefs\@ne
+			\let\c@loadepth\@ne
+			\newlistof{algorithms}{loa}{\listalgorithmname}
+		\endgroup
+		\let\l@algorithm\l@algorithms
+		\setlength{\cftalgorithmsindent}{0pt} % don't indent algorithm list
+		\setlength{\cftalgorithmsnumwidth}{\cftfignumwidth}
+
+		\renewcommand{\thealgorithm}{\arabic{chapter}.\arabic{algorithm}}
+
+		\let\oldlistofalgorithms\listofalgorithms
+		\def\listofalgorithms{%
+			\begingroup
+			\renewcommand*{\addvspace}[1]{}
+			\oldlistofalgorithms
+			\endgroup
+}}}
 
 %-----------------------------------------------------------------
 % Glossary formatting

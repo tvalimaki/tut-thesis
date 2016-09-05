@@ -10,6 +10,8 @@
 \usepackage{ctable} % advanced tabular environment
 \usepackage{amsmath} % math typesetting
 \usepackage{amsfonts} % fonts needed in mathmode
+\usepackage[chapter]{algorithm} % algorithmic environment
+\usepackage{algpseudocode} % pseudocode
 \usepackage[math]{blindtext} % generates pointles text for testing purposes
 
 % preparatory content
@@ -58,6 +60,7 @@
 \tableofcontents
 \listoftables
 \listoffigures
+\listofalgorithms
 
 % if your glossary has long entries, you can adjust the entrywidth
 % using \setlength{\glsentrywidth}{<width>}, where <width> is e.g. 7em
@@ -95,6 +98,20 @@ We can later reference the Table~\ref{tab:comparisontable} just so~\autocite{Doe
 	\caption{A dummy figure made with TikZ.}
 	\label{fig:dummyfigure}
 \end{figure}
+
+\begin{algorithm}
+	\caption{Some pseudocode}
+	\begin{algorithmic}[1]
+		\Procedure{writingThesis}{subject} \Comment{A simple procedure really}
+			\State knowledge $\gets$ \Call{doResearch}{subject}
+
+			\While{thesis $\not=$ finished}
+				\State \Call{write}{thesis}
+			\EndWhile
+			\State\Return{thesis}
+		\EndProcedure
+	\end{algorithmic}
+\end{algorithm}
 
 \blindtext % more non-sense
 
